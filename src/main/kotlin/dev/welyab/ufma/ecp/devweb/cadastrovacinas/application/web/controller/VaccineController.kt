@@ -67,7 +67,7 @@ class VaccineController(
     ) = vaccineService
         .findVaccine(id)
         .copy(
-            name = vacinaRequest.nome,
+            name = vacinaRequest.name,
             batchNumber = vacinaRequest.batchNumber
         )
         .apply { vaccineService.updateVaccine(this) }
@@ -95,9 +95,9 @@ class VaccineController(
     )
     @PostMapping
     fun saveVaccine(
-        @RequestBody vacinaRequest: VaccineRequest
+        @RequestBody vaccineRequest: VaccineRequest
     ) = vaccineService
-        .saveVaccine(vacinaRequest.toVaccine())
+        .saveVaccine(vaccineRequest.toVaccine())
         .toVaccineResponse()
         .applyHateoas()
         .let { ok(it) }

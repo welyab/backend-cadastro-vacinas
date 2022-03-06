@@ -76,7 +76,3 @@ fun createApplicationTable(
     batchNumber = vaccine.batchNumber,
     applicationDate = applicationDate
 )
-
-fun main() {
-    (1..20).forEach { println(UUID.randomUUID().toString()) }
-}

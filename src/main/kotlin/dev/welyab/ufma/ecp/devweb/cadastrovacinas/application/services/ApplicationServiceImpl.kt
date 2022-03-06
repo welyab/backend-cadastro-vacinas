@@ -12,6 +12,7 @@ import dev.welyab.ufma.ecp.devweb.cadastrovacinas.core.entities.Vaccine
 import dev.welyab.ufma.ecp.devweb.cadastrovacinas.core.services.ApplicationService
 import dev.welyab.ufma.ecp.devweb.cadastrovacinas.core.services.exceptions.DuplicatedVaccineApplicationException
 import dev.welyab.ufma.ecp.devweb.cadastrovacinas.core.services.exceptions.ApplicationNotFoundException
+import dev.welyab.ufma.ecp.devweb.cadastrovacinas.core.services.exceptions.ApplicatorNotFoundException
 import dev.welyab.ufma.ecp.devweb.cadastrovacinas.core.services.exceptions.VaccineNotFoundException
 import java.time.LocalDate
 import java.util.UUID
@@ -63,7 +64,7 @@ class ApplicationServiceImpl(
         vaccine: Vaccine,
         applicationDate: LocalDate
     ): ApplicationInfo {
-        if (applicatorRepository.existsById(applicator.id)) throw ApplicationNotFoundException()
+        if (applicatorRepository.existsById(applicator.id)) throw ApplicatorNotFoundException()
         if (vaccineRepository.existsById(vaccine.id)) throw VaccineNotFoundException()
 
         if (applicationRepository.existsByPersonCpfAndApplicationDate(

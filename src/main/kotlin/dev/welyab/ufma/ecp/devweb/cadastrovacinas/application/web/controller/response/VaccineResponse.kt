@@ -6,7 +6,13 @@ import org.springframework.hateoas.RepresentationModel
 data class VaccineResponse(
     val id: String,
     val nome: String,
+    val doses: Int,
     val batchNumber: String
 ) : RepresentationModel<VaccineResponse>()
 
-fun Vaccine.toVaccineResponse() = VaccineResponse(id, name, batchNumber)
+fun Vaccine.toVaccineResponse() = VaccineResponse(
+    id,
+    name,
+    doses,
+    batchNumber
+)
