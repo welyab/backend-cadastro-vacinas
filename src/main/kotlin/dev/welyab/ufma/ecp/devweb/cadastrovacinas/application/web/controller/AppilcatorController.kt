@@ -4,7 +4,7 @@ import dev.welyab.ufma.ecp.devweb.cadastrovacinas.application.web.controller.Api
 import dev.welyab.ufma.ecp.devweb.cadastrovacinas.application.web.controller.request.AtualizarAplicadorRequest
 import dev.welyab.ufma.ecp.devweb.cadastrovacinas.application.web.controller.request.ApplicatorRequest
 import dev.welyab.ufma.ecp.devweb.cadastrovacinas.application.web.controller.request.toAplicador
-import dev.welyab.ufma.ecp.devweb.cadastrovacinas.application.web.controller.response.AplicadorResponse
+import dev.welyab.ufma.ecp.devweb.cadastrovacinas.application.web.controller.response.ApplicatorResponse
 import dev.welyab.ufma.ecp.devweb.cadastrovacinas.application.web.controller.response.AplicadorListResponse
 import dev.welyab.ufma.ecp.devweb.cadastrovacinas.application.web.controller.response.toAplicadorResponse
 import dev.welyab.ufma.ecp.devweb.cadastrovacinas.core.services.ApplicatorService
@@ -15,6 +15,8 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import kotlin.math.max
+import kotlin.math.min
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.hateoas.IanaLinkRelations
@@ -52,7 +54,7 @@ class AppilcatorController(
                 content = [
                     Content(
                         mediaType = APPLICATION_JSON_VALUE,
-                        schema = Schema(implementation = AplicadorResponse::class)
+                        schema = Schema(implementation = ApplicatorResponse::class)
                     )
                 ]
             ),
@@ -91,7 +93,7 @@ class AppilcatorController(
                 content = [
                     Content(
                         mediaType = APPLICATION_JSON_VALUE,
-                        schema = Schema(implementation = AplicadorResponse::class)
+                        schema = Schema(implementation = ApplicatorResponse::class)
                     )
                 ]
             )
@@ -127,13 +129,16 @@ class AppilcatorController(
     @GetMapping
     fun listarAplicadores(
         @Parameter(description = "Page number - 0 indexed")
-        @RequestParam
+        @RequestParam(required = false, defaultValue = "-1")
         pageNumber: Int,
         @Parameter(description = "Page size")
-        @RequestParam
+        @RequestParam(required = false, defaultValue = "0")
         pageSize: Int
     ) = applicatorService
-        .findApplicators(pageNumber, pageSize)
+        .findApplicators(
+            max(pageNumber, 0),
+            min(pageSize.takeIf { it >= 1 } ?: MAX_PAGE_SIZE, MAX_PAGE_SIZE)
+        )
         .map { it.toAplicadorResponse().applyHateoas() }
         .let { AplicadorListResponse(it.content).apply { this.applyHateoas(it) } }
         .let { ok(it) }
@@ -150,7 +155,7 @@ class AppilcatorController(
                 content = [
                     Content(
                         mediaType = APPLICATION_JSON_VALUE,
-                        schema = Schema(implementation = AplicadorResponse::class)
+                        schema = Schema(implementation = ApplicatorResponse::class)
                     )
                 ]
             ),
@@ -182,7 +187,7 @@ class AppilcatorController(
                 content = [
                     Content(
                         mediaType = APPLICATION_JSON_VALUE,
-                        schema = Schema(implementation = AplicadorResponse::class)
+                        schema = Schema(implementation = ApplicatorResponse::class)
                     )
                 ]
             ),
@@ -203,10 +208,10 @@ class AppilcatorController(
         ?.let { ok(it) }
         ?: noContent().build()
 
-    private fun AplicadorResponse.applyHateoas() =
+    private fun ApplicatorResponse.applyHateoas() =
         add(linkTo(AppilcatorController::class.java).slash(id).withSelfRel())
 
-    private fun AplicadorListResponse.applyHateoas(page: Page<AplicadorResponse>): AplicadorListResponse {
+    private fun AplicadorListResponse.applyHateoas(page: Page<ApplicatorResponse>): AplicadorListResponse {
         addIf(page.hasPrevious()) {
             page.previousPageable().let {
                 linkTo(

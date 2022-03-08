@@ -27,7 +27,7 @@ data class ApplicationTable(
     val personBirthDate: LocalDate,
     @Column(name = "applicator_name")
     val applicatorName: String,
-    @Column(name = "cpf_aplicador")
+    @Column(name = "applicator_cpf")
     val applicatorCpf: Long,
     @Column(name = "coren")
     val coren: String,

@@ -13,6 +13,8 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import kotlin.math.max
+import kotlin.math.min
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.hateoas.IanaLinkRelations
@@ -123,13 +125,16 @@ class VaccineController(
     @GetMapping
     fun findVaccines(
         @Parameter(description = "Page number (0-indexed)")
-        @RequestParam
+        @RequestParam(required = false, defaultValue = "-1")
         pageNumber: Int,
         @Parameter(description = "Page size")
-        @RequestParam
+        @RequestParam(required = false, defaultValue = "0")
         pageSize: Int
     ) = vaccineService
-        .findVaccines(pageNumber, pageSize)
+        .findVaccines(
+            max(pageNumber, 0),
+            min(pageSize.takeIf { it >= 1 } ?: MAX_PAGE_SIZE, MAX_PAGE_SIZE)
+        )
         .map { it.toVaccineResponse().applyHateoas() }
         .let {
             VaccineListResponse(it.content).applyHateoas(it)
