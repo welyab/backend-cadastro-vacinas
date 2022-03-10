@@ -30,7 +30,7 @@ class VaccineServiceImpl(
         vaccineRepository
             .findById(id)
             .map { it.toVaccine() }
-            .orElseThrow { VaccineNotFoundException() }
+            .orElseThrow { VaccineNotFoundException(id) }
 
     override fun deleteVaccine(
         id: String

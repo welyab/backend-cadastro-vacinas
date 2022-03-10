@@ -5,7 +5,7 @@ import dev.welyab.ufma.ecp.devweb.cadastrovacinas.application.web.controller.req
 import dev.welyab.ufma.ecp.devweb.cadastrovacinas.application.web.controller.request.ApplicatorRequest
 import dev.welyab.ufma.ecp.devweb.cadastrovacinas.application.web.controller.request.toAplicador
 import dev.welyab.ufma.ecp.devweb.cadastrovacinas.application.web.controller.response.ApplicatorResponse
-import dev.welyab.ufma.ecp.devweb.cadastrovacinas.application.web.controller.response.AplicadorListResponse
+import dev.welyab.ufma.ecp.devweb.cadastrovacinas.application.web.controller.response.ApplicatorListResponse
 import dev.welyab.ufma.ecp.devweb.cadastrovacinas.application.web.controller.response.toAplicadorResponse
 import dev.welyab.ufma.ecp.devweb.cadastrovacinas.core.services.ApplicatorService
 import dev.welyab.ufma.ecp.devweb.cadastrovacinas.core.services.exceptions.ApplicatorNotFoundException
@@ -140,7 +140,7 @@ class AppilcatorController(
             min(pageSize.takeIf { it >= 1 } ?: MAX_PAGE_SIZE, MAX_PAGE_SIZE)
         )
         .map { it.toAplicadorResponse().applyHateoas() }
-        .let { AplicadorListResponse(it.content).apply { this.applyHateoas(it) } }
+        .let { ApplicatorListResponse(it.content).apply { this.applyHateoas(it) } }
         .let { ok(it) }
 
     @Operation(
@@ -211,7 +211,7 @@ class AppilcatorController(
     private fun ApplicatorResponse.applyHateoas() =
         add(linkTo(AppilcatorController::class.java).slash(id).withSelfRel())
 
-    private fun AplicadorListResponse.applyHateoas(page: Page<ApplicatorResponse>): AplicadorListResponse {
+    private fun ApplicatorListResponse.applyHateoas(page: Page<ApplicatorResponse>): ApplicatorListResponse {
         addIf(page.hasPrevious()) {
             page.previousPageable().let {
                 linkTo(

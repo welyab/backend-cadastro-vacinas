@@ -1,5 +1,6 @@
 package dev.welyab.ufma.ecp.devweb.cadastrovacinas.application.web.controller.response
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
 import dev.welyab.ufma.ecp.devweb.cadastrovacinas.core.entities.Person
 import java.time.LocalDate
@@ -10,6 +11,7 @@ data class PersonResponse(
     @JsonProperty("name")
     val name: String,
     @JsonProperty("birth_date")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     val birthDate: LocalDate
 )
 

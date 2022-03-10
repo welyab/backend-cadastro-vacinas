@@ -2,4 +2,4 @@ package dev.welyab.ufma.ecp.devweb.cadastrovacinas.application.web.controller.re
 
 import org.springframework.hateoas.RepresentationModel
 
-data class AplicadorListResponse(val vacians: List<ApplicatorResponse>) : RepresentationModel<AplicadorListResponse>()
+data class ApplicatorListResponse(val vaccines: List<ApplicatorResponse>) : RepresentationModel<ApplicatorListResponse>()

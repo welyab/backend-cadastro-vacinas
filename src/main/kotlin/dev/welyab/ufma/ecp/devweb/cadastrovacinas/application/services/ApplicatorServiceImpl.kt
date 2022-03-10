@@ -30,7 +30,7 @@ class ApplicatorServiceImpl(
         applicatorRepository
             .findById(id)
             .map { it.toApplicator() }
-            .orElseThrow { ApplicatorNotFoundException() }
+            .orElseThrow { ApplicatorNotFoundException(id) }
 
     override fun deleteApplicator(
         id: String

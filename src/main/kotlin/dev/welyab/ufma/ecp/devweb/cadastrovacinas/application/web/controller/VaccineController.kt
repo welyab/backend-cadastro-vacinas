@@ -70,7 +70,8 @@ class VaccineController(
         .findVaccine(id)
         .copy(
             name = vacinaRequest.name,
-            batchNumber = vacinaRequest.batchNumber
+            batchNumber = vacinaRequest.batchNumber,
+            doses = vacinaRequest.doses
         )
         .apply { vaccineService.updateVaccine(this) }
         .toVaccineResponse()

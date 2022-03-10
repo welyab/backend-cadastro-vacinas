@@ -64,8 +64,8 @@ class ApplicationServiceImpl(
         vaccine: Vaccine,
         applicationDate: LocalDate
     ): ApplicationInfo {
-        if (applicatorRepository.existsById(applicator.id)) throw ApplicatorNotFoundException()
-        if (vaccineRepository.existsById(vaccine.id)) throw VaccineNotFoundException()
+        if (!applicatorRepository.existsById(applicator.id)) throw ApplicatorNotFoundException(applicator.id)
+        if (!vaccineRepository.existsById(vaccine.id)) throw VaccineNotFoundException(vaccine.id)
 
         if (applicationRepository.existsByPersonCpfAndApplicationDate(
                 person.cpf,
